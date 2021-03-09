@@ -125,6 +125,8 @@ jobs:
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
         mkdir -p /workdir/release
+        mkdir -p /workdir/release/ipk
+        mkdir -p /workdir/release/firmware
         cd openwrt/bin/targets/*/*
         rm -rf packages
         cp -rf $(find /workdir/openwrt/bin/packages/ -type f -name "*.ipk") /workdir/release/ipk
