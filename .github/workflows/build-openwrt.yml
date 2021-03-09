@@ -124,9 +124,13 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
+        mkdir -p /workdir/release
         cd openwrt/bin/targets/*/*
         rm -rf packages
-        zip -q -r /workdir/openwrt/bin/targets/package.zip /workdir/openwrt/bin/packages
+        cp -rf $(find /workdir/openwrt/bin/packages/ -type f -name "*.ipk") /workdir/release/ipk
+        cp -rf $(find /workdir/openwrt/bin/targets/ -type f) /workdir/release/firmware
+        zip -q -r /workdir/release/package.zip /workdir/release/ipk
+        rm -rf /workdir/release/ipk
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
@@ -161,7 +165,7 @@ jobs:
       run: |
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
-        ls openwrt/bin/packages -l | grep ^[^d] | awk '{print $9}' >> release.txt
+        ls /workdir/openwrt/bin/packages/ -l | grep ^[^d] | awk '{print $9}' >> release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
@@ -174,7 +178,7 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
+        files: /workdir/release
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
