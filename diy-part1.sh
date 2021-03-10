@@ -9,7 +9,7 @@
 # File name: diy-part1.sh
 # Description: OpenWrt DIY script part 1 (Before Update feeds)
 #
-pushd /workdir/openwrt/package
+pushd package
 git clone https://github.com/kenzok8/small.git
 git clone https://github.com/kenzok8/openwrt-packages.git
 git clone https://github.com/godros/luci-app-godproxy.git
