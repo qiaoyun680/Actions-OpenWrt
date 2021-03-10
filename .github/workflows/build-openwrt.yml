@@ -128,7 +128,7 @@ jobs:
         cp -rf $(find bin/packages/ -type f -name "*.ipk") release/ipk
         cp -rf bin/targets/ firmware
         pushd release/ipk
-        zip -q -r release/package.zip *
+        zip -q -r ../package.zip *
         popd
         rm -rf release/ipk
         cd  release
