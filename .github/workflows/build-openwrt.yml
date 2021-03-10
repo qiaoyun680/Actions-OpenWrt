@@ -130,7 +130,7 @@ jobs:
         cd openwrt/bin/targets/*/*
         rm -rf packages
         cp -rf $(find /workdir/openwrt/bin/packages/ -type f -name "*.ipk") /workdir/release/ipk
-        cp -rf $(find /workdir/openwrt/bin/targets/ -type f) /workdir/release/firmware
+        cp -rf /workdir/openwrt/bin/targets/ /workdir/release/firmware
         zip -q -r /workdir/release/package.zip /workdir/release/ipk
         rm -rf /workdir/release/ipk
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
@@ -180,7 +180,9 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: /workdir/release
+        files: /workdir/release/*
+        file_glob: true
+        overwrite: true
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
