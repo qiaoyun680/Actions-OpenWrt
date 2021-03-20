@@ -127,7 +127,7 @@ jobs:
         mkdir -p release/firmware
         cp -rf $(find bin/packages/ -type f -name "*.ipk") release/ipk
         ls release/ipk -l | grep ^[^d] | awk '{print $9}' >> release/releaseIPK.txt
-        cp -r bin/targets/*/*/ release/
+        cp bin/targets/*/*/* release/
         pushd release/ipk
         zip -q -r ../package.zip *
         popd
